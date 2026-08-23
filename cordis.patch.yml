@@ -1,0 +1,9 @@
+# dsh-preset-plus bundle patch: inserts the plugin into a profile's layer stack.
+- insert:
+    - id: dsh-preset-plus
+      name: 'dsh-preset-plus'
+      config:
+        enabled: true
+        scopedPresets: ["jailbreak"]
+        autoMode: true
+        verbose: false
