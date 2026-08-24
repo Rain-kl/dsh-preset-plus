@@ -12,6 +12,8 @@
   "files": [
     "lib",
     "presets",
+    "preset",
+    "scripts",
     "docs",
     "client.js",
     "cordis.patch.yml",
@@ -21,6 +23,7 @@
   "scripts": {
     "build": "node scripts/assert-build.mjs",
     "prepare": "node scripts/assert-build.mjs",
+    "postinstall": "node scripts/install-preset.mjs",
     "lint": "node --check lib/index.js && node --check lib/core.js && node --check client.js",
     "release": "node scripts/release.mjs"
   },

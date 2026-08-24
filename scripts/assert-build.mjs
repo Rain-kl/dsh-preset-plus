@@ -17,6 +17,9 @@ const REQUIRED = [
   'client.js',
   'cordis.patch.yml',
   'presets/jailbreak.json',
+  'preset/preset.yml',
+  'preset/agent.cordis.yml',
+  'scripts/install-preset.mjs',
 ];
 
 let failed = false;

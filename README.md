@@ -1,6 +1,6 @@
 # dsh-preset-plus
 
-DSH 自定义模式增强插件：参考SillyTavern 的预设功能, 实现了一个简单的**预设编辑器**。
+DSH 预设增强插件：参考SillyTavern 的预设功能, 新增一个简单的**预设编辑器**。
 
 ## 它解决什么
 
@@ -49,6 +49,13 @@ dsh plugin --profile web add github:Rain-kl/dsh-preset-plus
 dsh plugin --profile web add @rain-kl/dsh-preset-plus
 ```
 
+安装插件时会自动安装固定的 `preset-plus` 模式，并写入 DSH 的 preset roster：
+
+```text
+~/.dsh/.agent-presets/preset-plus/
+```
+
+模式显示名为 `PresetPlus`。用户不需要手动创建模式；设置界面只负责在这个模式下选择和编辑具体预设。
 
 ## 预设数据与导入导出
 
