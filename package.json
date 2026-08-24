@@ -1,6 +1,6 @@
 {
   "name": "@rain-kl/dsh-preset-plus",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "DeepSeek Harness universal preset enhancement plugin: an editable preset editor (system/user/assistant entries + camouflage model output prepopulation)",
   "type": "module",
   "main": "lib/index.js",
