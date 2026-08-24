@@ -76,6 +76,46 @@ window.__ModuleLoader__.load({ id: "dsh-preset-plus", factory: (require) => {
 				.finally(() => setBusy(false));
 		}, []);
 
+		const exportPreset = useCallback(() => {
+			if (!preset) return;
+			const raw = JSON.stringify(preset, null, 2);
+			try {
+				// 浏览器下载
+				const blob = new Blob([raw], { type: "application/json" });
+				const url = URL.createObjectURL(blob);
+				const a = document.createElement("a");
+				a.href = url;
+				a.download = "preset-plus-" + (preset.name || "preset") + ".json";
+				document.body.appendChild(a);
+				a.click();
+				document.body.removeChild(a);
+				URL.revokeObjectURL(url);
+				setNotice({ kind: "ok", text: "已导出为 JSON 文件。" });
+			} catch (e) {
+				setNotice({ kind: "error", text: "导出失败: " + (e.message || String(e)) });
+			}
+		}, [preset]);
+
+		const importPreset = useCallback(() => {
+			const text = window.prompt("粘贴要导入的 JSON 预设文本：", "");
+			if (text === null) return;
+			if (text.trim() === "") { setNotice({ kind: "error", text: "导入内容为空。" }); return; }
+			setBusy(true);
+			setNotice({ kind: "idle", text: "" });
+			fetch("/dsh-preset-plus/import", {
+				method: "POST",
+				headers: { "content-type": "application/json" },
+				body: JSON.stringify({ raw: text }),
+			})
+				.then((r) => r.json())
+				.then((d) => {
+					if (d.ok) { setPreset(d.preset); setNotice({ kind: "ok", text: "已导入并保存。" }); }
+					else setNotice({ kind: "error", text: "导入失败: " + (d.error || "") });
+				})
+				.catch((e) => setNotice({ kind: "error", text: "导入失败: " + e.message }))
+				.finally(() => setBusy(false));
+		}, []);
+
 		const updateEntry = useCallback((idx, patch) => {
 			setPreset((p) => {
 				const entries = p.entries.map((e, i) => i === idx ? { ...e, ...patch } : e);
@@ -150,6 +190,8 @@ window.__ModuleLoader__.load({ id: "dsh-preset-plus", factory: (require) => {
 					h("div", { style: ROW_STYLE },
 						h("button", { style: BTN("var(--accent, #2f81f7)"), onClick: addEntry }, "+ 新增条目"),
 						h("button", { style: Object.assign({ opacity: busy || !preset ? 0.6 : 1 }, BTN("var(--accent, #2f81f7)")), disabled: busy || !preset, onClick: () => save(preset) }, "保存"),
+						h("button", { style: BTN_GHOST, onClick: exportPreset }, "导出"),
+						h("button", { style: BTN_GHOST, onClick: importPreset }, "导入"),
 						h("button", { style: BTN_GHOST, onClick: loadState }, "重置"),
 						notice.kind === "ok" ? h("span", { style: { fontSize: "13px", opacity: 0.85 } }, notice.text)
 							: notice.kind === "error" ? h("span", { style: { fontSize: "13px", color: "#e5484d" } }, notice.text)
