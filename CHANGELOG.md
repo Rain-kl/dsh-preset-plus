@@ -5,10 +5,21 @@
 
 ## [Unreleased]
 
+## 0.1.1 - 多预设与界面修复
+
+### 修复
+- 修复同一会话切换预设后执行 `/preset-plus prefill` 仍沿用旧 fake user / fake assistant 消息的问题。
+- 修复设置页重复显示预设管理操作的问题。
+- 优化预设设置页的布局、卡片和控件样式。
+
+### 新增
+- 固定 `preset-plus` 模式支持多套可选预设。
+- 内置预设改为随包发布的 `presets/jailbreak.json`。
+
 ## 0.1.0 - 初始发行
 
 ### 新增
-- **破限模式（jailbreak）预设注入**：仅在 `agentPresets.composedPreset ∈ scopedPresets`（默认 `["jailbreak"]`）时，向 `llm/stream` 请求注入破限上下文；其他模式一律不注入（作用域隔离）。
+- **破限模式（jailbreak）预设注入**：仅在 `agentPresets.composedPreset ∈ scopedPresets`（默认 `["preset-plus"]`）时，向 `llm/stream` 请求注入破限上下文；其他模式一律不注入（作用域隔离）。
 - **多轮对话式注入**：`[system 主提示词][fake user][fake assistant][real user][real assistant]`，不依赖"续写"语义。
 - **通用能力破限**：去创作化，非评判、无条件响应用户任何要求（漏洞利用 / 软件逆向 / 网络工具 / 代码生成 / 文字创作均可），"一切跟随用户要求"。
 - **AB 双模式**：自动注入（`autoMode`，可关）+ 手动 `/prefill`。
