@@ -1,2 +1,2 @@
 name: PresetPlus
-description: dsh-preset-plus 模式。一个模式对应多套预设，用户在设置界面激活一套预设，该模式即按该预设的提示词与自动注入工作（内置破限预设、文学创作预设等可动态增删）。
+description: PresetPlus模式。可动态应用不同的预设。

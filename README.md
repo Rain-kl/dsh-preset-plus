@@ -49,14 +49,6 @@ dsh plugin --profile web add github:Rain-kl/dsh-preset-plus
 dsh plugin --profile web add @rain-kl/dsh-preset-plus
 ```
 
-安装插件时会自动安装固定的 `preset-plus` 模式，并写入 DSH 的 preset roster：
-
-```text
-~/.dsh/.agent-presets/preset-plus/
-```
-
-模式显示名为 `PresetPlus`。用户不需要手动创建模式；设置界面只负责在这个模式下选择和编辑具体预设。
-
 ## 预设数据与导入导出
 
 保存文件位于 `~/.dsh/preset-plus.json`（若设置了 `DSH_HOME` 则位于对应目录）。格式为：
