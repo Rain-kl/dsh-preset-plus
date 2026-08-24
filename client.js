@@ -173,7 +173,7 @@ window.__ModuleLoader__.load({ id: "dsh-preset-plus", factory: (require) => {
 				: h("div", { style: { display: "flex", flexDirection: "column", gap: "16px" } },
 					h("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "end", gap: "12px", flexWrap: "wrap" } },
 						h("div", null, h("div", { style: { fontSize: "12px", color: TOKENS.muted, marginBottom: "6px" } }, "选择预设"), h("div", { style: { fontSize: "14px", fontWeight: 600 } }, listed.length + " 套可用预设")),
-						h("div", { style: ROW_STYLE }, h("button", { style: BTN_GHOST, onClick: addPreset }, "+ 新增"), h("button", { style: BTN_GHOST, onClick: importPreset }, "导入"), h("button", { style: BTN_GHOST, onClick: exportAll }, "导出全部"))),
+						h("div", { style: ROW_STYLE }, h("button", { style: BTN_GHOST, onClick: addPreset }, "+ 新增"),  h("button", { style: BTN_GHOST, onClick: exportAll }, "导出全部"))),
 				h("div", { style: LIST_STYLE },
 						listed.map((p) =>
 							h("div", { key: p.id, style: Object.assign({}, LIST_ITEM, { borderColor: isActive(p.id) ? TOKENS.accent : TOKENS.border, background: isActive(p.id) ? TOKENS.panel2 : TOKENS.panel }), onClick: () => activate(p.id) },
@@ -182,10 +182,10 @@ window.__ModuleLoader__.load({ id: "dsh-preset-plus", factory: (require) => {
 								h("span", { style: { color: isActive(p.id) ? TOKENS.accent : TOKENS.dim, fontSize: "11px" } }, isActive(p.id) ? "已激活" : "选择"),
 							)),
 						h("div", { style: ROW_STYLE },
-							h("button", { style: BTN_GHOST, onClick: addPreset }, "+ 新增预设"),
-							h("button", { style: BTN_GHOST, onClick: exportAll }, "导出全部"),
-							h("button", { style: BTN_GHOST, onClick: importPreset }, "导入"),
-							h("button", { style: { padding: "5px 10px", borderRadius: "6px", border: "1px solid rgba(229,72,77,0.5)", cursor: "pointer", fontSize: "12px", background: "transparent", color: "#e5484d" }, onClick: () => removePreset(selectedId) }, "删除当前预设"),
+
+
+
+
 							notice.kind === "ok" ? h("span", { style: { fontSize: "13px", opacity: 0.85 } }, notice.text)
 								: notice.kind === "error" ? h("span", { style: { fontSize: "13px", color: "#e5484d" } }, notice.text)
 								: null,
