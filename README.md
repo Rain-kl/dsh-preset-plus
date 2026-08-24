@@ -30,28 +30,17 @@ DSH 自定义模式增强插件：仿照SillyTavern 的预设功能, 实现的�
 
 ![preset-settings.png](docs/assets/preset-settings.png)
 
-
 ## 安装
 
 ### npm 直装（推荐，无需构建）
 ```bash
 dsh plugin --profile web add @rain-kl/dsh-preset-plus
 ```
-> 这是预构建的 npm 包（`@rain-kl/dsh-preset-plus`），不需要用户拉源码构建、不需要任何构建授权。指定版本可加 `@<version>`。
 
-### git 直装（纯 JS，无需 prepare 构建授权）
+### git 直装
 ```bash
-dsh plugin --profile web add github:Rain-kl/dsh-preset-plus#<sha>
+dsh plugin --profile web add github:Rain-kl/dsh-preset-plus
 ```
-> 插件本体是手写纯 JS（`lib/` + `client.js`），没有 TS 源码、没有 build 脚本，因此 git 安装后即可直接加载，不需要 `allowBuilds` 授权。建议锁定 commit（`#<sha>`）。
-
-### 本地 link 调试
-开发时可用本地路径 link（参照 `dsh-purge`）：
-```bash
-dsh plugin --profile web add /Users/ryan/Documents/DSH/dsh-preset-plus
-```
-
-> 客户端 bundle 通过插件 `package.json` 的 `dsh.client` 配置 + `client.js` 注入。
 
 ## 命令 / 工具
 
