@@ -39,10 +39,16 @@ DSH 自定义模式增强插件：参考SillyTavern 的预设功能, 实现了�
 
 ## 安装
 
-### npm 直装
+### git 安装(推荐)
+```bash
+dsh plugin --profile web add github:Rain-kl/dsh-preset-plus
+```
+
+### npm
 ```bash
 dsh plugin --profile web add @rain-kl/dsh-preset-plus
 ```
+
 
 ## 预设数据与导入导出
 
