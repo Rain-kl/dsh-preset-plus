@@ -5,6 +5,12 @@
 
 ## [Unreleased]
 
+## 0.1.3 - 自动安装 PresetPlus 模式
+
+### 新增
+- 安装插件时自动写入 `preset-plus` Agent Preset 及其 `PresetPlus` 显示描述。
+- 用户无需手动创建模式，设置页只负责管理该模式下的多套预设。
+
 ## 0.1.2 - 发布修复
 
 ### 修复
