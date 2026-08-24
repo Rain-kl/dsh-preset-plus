@@ -1,6 +1,22 @@
-# dsh-preset-plus
+<div align="center">
 
-DSH 预设增强插件：参考SillyTavern 的预设功能, 新增一个简单的**预设编辑器**。
+# DSH-Preset-Plus
+
+### DSH 预设增强插件
+
+参考 SillyTavern 预设模功能开发的一个基础的**预设编辑器**。
+
+
+<p>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-4b8f77" alt="MIT License"></a>
+  <a href="https://nodejs.org/"><img src="https://img.shields.io/badge/Node.js-339933?logo=node.js&logoColor=white" alt="Node.js 24+"></a>
+  <a href="https://linux.do/"><img src="https://img.shields.io/badge/LINUX%20DO-Community-1f6feb" alt="LINUX DO Community"></a>
+</p>
+
+
+</div>
+
+---
 
 ## 它解决什么
 
@@ -36,38 +52,23 @@ DSH 预设增强插件：参考SillyTavern 的预设功能, 新增一个简单�
 - **自动（auto，可关）**：第一条真实消息到来时自动注入，每会话仅注入一次（防叠加）。
 - **手动（/preset-plus prefill）**：用户显式触发，注入标记生效于下一条消息。
 
-## 安装
+---
 
-### git 安装(推荐)
+## 快速开始
+
+### Git (推荐)
 ```bash
 dsh plugin --profile web add github:Rain-kl/dsh-preset-plus
 ```
 
-### npm
+### npm 仓库
+
 ```bash
+#可能存在版本滞后
 dsh plugin --profile web add @rain-kl/dsh-preset-plus
 ```
 
-## 预设数据与导入导出
-
-保存文件位于 `~/.dsh/preset-plus.json`（若设置了 `DSH_HOME` 则位于对应目录）。格式为：
-
-```json
-{
-  "version": 1,
-  "activePresetId": "jailbreak",
-  "presets": {
-    "jailbreak": {
-      "id": "jailbreak",
-      "name": "破限预设",
-      "autoMode": true,
-      "entries": [{ "role": "system", "text": "..." }]
-    }
-  }
-}
-```
-
-设置页支持新增、删除、激活和编辑预设，以及编辑条目的角色、文本、顺序。导入会自动识别格式，同 id 替换，其余预设保留并合并。
+---
 
 ## 命令 / 工具
 
@@ -89,5 +90,13 @@ dsh plugin --profile web add @rain-kl/dsh-preset-plus
         verbose: false
 ```
 
-## 许可
-MIT
+---
+
+## 友情链接 / Links
+
+- [LinuxDo](https://linux.do)
+
+
+## License
+
+The [MIT License](LICENSE) allows use, modification, distribution, and commercial use.
