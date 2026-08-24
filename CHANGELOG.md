@@ -5,12 +5,6 @@
 
 ## [Unreleased]
 
-### 新增
-- 发布流水线：`ci.yml`（发布入口健康检查）与 `release.yml`（npm 发布 + GitHub Release）。
-- `scripts/release.mjs`：一键 bump 版本、打 `v*` tag、push（不 publish，发布交给 CI）。
-- `scripts/assert-build.mjs`：作为"构建"校验发布入口存在且 core 可加载（纯 JS，无需构建授权）。
-- npm 包名改为 scoped `@rain-kl/dsh-preset-plus`，补齐 repository/bugs/homepage。
-
 ## 0.1.0 - 初始发行
 
 ### 新增

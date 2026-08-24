@@ -1,6 +1,6 @@
 # dsh-preset-plus
 
-DSH 自定义模式增强插件：仿照SillyTavern 的预设功能, 实现的一个简单的**预设编辑器**（system / user / assistant 条目）。内置jailbreak预设。
+DSH 自定义模式增强插件：仿照SillyTavern 的预设功能, 实现的一个简单的**预设编辑器**（system / user / assistant 条目）。
 
 ## 它解决什么
 
@@ -9,12 +9,18 @@ DSH 自定义模式增强插件：仿照SillyTavern 的预设功能, 实现的�
 
 ## 工作方式
 
-### 作用域门禁（核心安全约束）
+### 作用域
 插件只提供一个固定 DSH 模式 **`preset-plus`**。仅当**当前会话挂载的 preset id ∈ `scopedPresets`**（默认 `["preset-plus"]`）时，才向请求注入预设上下文。
 
-`jailbreak` 是内置预设 id，不是 DSH 模式 id。设置页中可以创建多个预设，但同一时间只激活一个；激活的预设决定 `preset-plus` 使用的提示词和自动注入开关。首次安装且没有保存文件时，会从随包发布的 `presets/jailbreak.json` 初始化。
+你可以在你可以在设置界面新增多种预设，但是只能同时生效一个。
 
-其他模式**一律不注入任何虚假上下文**，避免污染非破限场景。
+默认内置 `jailbreak` 预设
+
+其他模式**一律不注入任何虚假上下文**。
+
+## 预设设置界面
+
+![preset-settings.png](docs/assets/preset-settings.png)
 
 ### 注入顺序
 ```
@@ -23,25 +29,19 @@ DSH 自定义模式增强插件：仿照SillyTavern 的预设功能, 实现的�
 其中 system/user/assistant 来自你编辑的预设条目；真实输入与输出是会话本就有的。
 
 >注意: 伪造输入无法记录到"轨迹"中, 可以通过查看控制台打印判断是否注入成功
+> 
+![api-request.png](docs/assets/api-request.png)
+> 
 
 ### AB 双模式
 - **自动（auto，可关）**：第一条真实消息到来时自动注入，每会话仅注入一次（防叠加）。
 - **手动（/preset-plus prefill）**：用户显式触发，注入标记生效于下一条消息。
 
-## 预设设置界面
-
-![preset-settings.png](docs/assets/preset-settings.png)
-
 ## 安装
 
-### npm 直装（推荐，无需构建）
+### npm 直装
 ```bash
 dsh plugin --profile web add @rain-kl/dsh-preset-plus
-```
-
-### git 直装
-```bash
-dsh plugin --profile web add github:Rain-kl/dsh-preset-plus
 ```
 
 ## 预设数据与导入导出
