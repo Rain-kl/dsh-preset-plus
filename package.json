@@ -1,7 +1,7 @@
 {
   "name": "@rain-kl/dsh-preset-plus",
   "version": "0.1.1",
-  "description": "DSH 通用预设增强插件：一个可编辑的预设编辑器（system/user/assistant 条目 + 伪装模型输出预填充），仅在指定 preset 下生效。内置破限（jailbreak）预设。",
+  "description": "DeepSeek Harness universal preset enhancement plugin: an editable preset editor (system/user/assistant entries + camouflage model output prepopulation)",
   "type": "module",
   "main": "lib/index.js",
   "exports": {

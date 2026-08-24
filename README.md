@@ -1,6 +1,6 @@
 # dsh-preset-plus
 
-DSH 自定义模式增强插件：仿照SillyTavern 的预设功能, 实现的一个简单的**预设编辑器**（system / user / assistant 条目）。
+DSH 自定义模式增强插件：参考SillyTavern 的预设功能, 实现了一个简单的**预设编辑器**。
 
 ## 它解决什么
 
@@ -10,13 +10,13 @@ DSH 自定义模式增强插件：仿照SillyTavern 的预设功能, 实现的�
 ## 工作方式
 
 ### 作用域
-插件只提供一个固定 DSH 模式 **`preset-plus`**。仅当**当前会话挂载的 preset id ∈ `scopedPresets`**（默认 `["preset-plus"]`）时，才向请求注入预设上下文。
+插件只提供一个固定 DSH 模式 **`preset-plus`**。仅当**当前会话挂载的 preset id ∈ `scopedPresets`**时，才向请求注入预设上下文。
 
 你可以在你可以在设置界面新增多种预设，但是只能同时生效一个。
 
 默认内置 `jailbreak` 预设
 
-其他模式**一律不注入任何虚假上下文**。
+其他模式**一律不进行任何注入**。
 
 ## 预设设置界面
 
@@ -63,7 +63,7 @@ dsh plugin --profile web add @rain-kl/dsh-preset-plus
 }
 ```
 
-设置页支持新增、删除、激活和编辑预设，以及编辑条目的角色、文本、顺序。可以导出当前预设（单条 JSON）或全部预设（上述多条 JSON）；导入会自动识别格式，同 id 替换，其余预设保留并合并。
+设置页支持新增、删除、激活和编辑预设，以及编辑条目的角色、文本、顺序。导入会自动识别格式，同 id 替换，其余预设保留并合并。
 
 ## 命令 / 工具
 
@@ -84,22 +84,6 @@ dsh plugin --profile web add @rain-kl/dsh-preset-plus
         autoMode: true
         verbose: false
 ```
-
-## 发布（维护者）
-
-发布流程（照搬 modlens 模式）：`pnpm release <version>` 负责 bump 版本、打 `v*` tag、push；**push 出 tag 后 CI 的 `.github/workflows/release.yml` 是唯一发布点**。
-
-```bash
-pnpm release 0.1.1     # 显式版本
-pnpm release patch      # 从当前版本 bump
-```
-
-`release` 脚本会先做守卫（git 干净、在 main、版本前进、tag 不存在、远端同步、CHANGELOG 有对应段），全部通过才不可逆地提交+打tag+push。发布与建 GitHub Release 由 CI 执行：
-
-- **`.github/workflows/ci.yml`**：push/PR 触发，做发布入口健康检查（`scripts/assert-build.mjs` + 语法检查）。
-- **`.github/workflows/release.yml`**：push `v*` tag 触发，用 OIDC 信任发布（`npm publish --provenance`）+ 从 CHANGELOG 提取 notes 建 GitHub Release。
-
-**发布前的唯一前置（无法在仓库内配置）**：在 npmjs.com 打开 `@rain-kl/dsh-preset-plus` 的 package 设置 → **Trusted publishers** → 添加本仓库与本 workflow（`Rain-kl/dsh-preset-plus`，`.github/workflows/release.yml`）。未配置前 `npm publish --provenance` 会以身份错误失败。
 
 ## 许可
 MIT
