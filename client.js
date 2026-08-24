@@ -13,16 +13,17 @@ window.__ModuleLoader__.load({ id: "dsh-preset-plus", factory: (require) => {
 	const name = "dsh-preset-plus";
 	const inject = ["slots"];
 
-	const PACKET_STYLE = { maxWidth: "860px", display: "flex", flexDirection: "column", gap: "12px" };
-	const ROW_STYLE = { display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" };
-	const BTN = (bg) => ({ padding: "5px 14px", borderRadius: "6px", border: "none", cursor: "pointer", fontSize: "13px", background: bg, color: "#fff" });
-	const BTN_GHOST = { padding: "5px 10px", borderRadius: "6px", border: "1px solid rgba(128,128,128,0.4)", cursor: "pointer", fontSize: "12px", background: "transparent", color: "inherit" };
-	const INPUT_STYLE = { flex: "1", padding: "6px 8px", fontSize: "13px", boxSizing: "border-box", background: "transparent", color: "inherit", border: "1px solid rgba(128,128,128,0.35)", borderRadius: "6px" };
-	const TEXTAREA_STYLE = { width: "100%", minHeight: "90px", boxSizing: "border-box", fontFamily: "ui-monospace, 'Cascadia Mono', Consolas, monospace", fontSize: "12px", lineHeight: 1.5, padding: "8px", resize: "vertical", background: "transparent", color: "inherit", border: "1px solid rgba(128,128,128,0.35)", borderRadius: "6px" };
-	const CARD_STYLE = { border: "1px solid rgba(128,128,128,0.3)", borderRadius: "8px", padding: "10px", display: "flex", flexDirection: "column", gap: "6px" };
-	const SELECT_STYLE = { padding: "5px 8px", fontSize: "13px", borderRadius: "6px", border: "1px solid rgba(128,128,128,0.35)", background: "transparent", color: "inherit" };
-	const LIST_STYLE = { display: "flex", flexDirection: "column", gap: "4px", fontSize: "13px", marginBottom: "4px" };
-	const LIST_ITEM = { display: "flex", alignItems: "center", gap: "6px", padding: "4px 8px", borderRadius: "6px", border: "1px solid rgba(128,128,128,0.25)", cursor: "pointer" };
+	const TOKENS = { ink: "var(--dsw-alias-label-primary, #e5e7eb)", muted: "var(--dsw-alias-label-tertiary, #9ca3af)", dim: "var(--dsw-alias-label-dimmed, #6b7280)", border: "var(--dsw-alias-border-l2, rgba(128,128,128,.25))", panel: "var(--dsw-alias-bg-layer-3, rgba(255,255,255,.035))", panel2: "var(--dsw-alias-bg-layer-2, rgba(255,255,255,.06))", accent: "var(--dsw-alias-brand-primary, #4d9cff)", danger: "var(--dsw-alias-state-error-primary, #ef6b73)" };
+	const PACKET_STYLE = { width: "100%", maxWidth: "920px", display: "flex", flexDirection: "column", gap: "18px", color: TOKENS.ink, fontFamily: "inherit" };
+	const ROW_STYLE = { display: "flex", alignItems: "center", gap: "9px", flexWrap: "wrap" };
+	const BTN = (bg) => ({ padding: "8px 15px", borderRadius: "8px", border: "1px solid transparent", cursor: "pointer", fontSize: "13px", fontWeight: 600, background: bg, color: "#fff", transition: "opacity .15s, transform .15s" });
+	const BTN_GHOST = { padding: "7px 11px", borderRadius: "8px", border: "1px solid " + TOKENS.border, cursor: "pointer", fontSize: "12px", fontWeight: 500, background: "transparent", color: TOKENS.ink };
+	const INPUT_STYLE = { width: "100%", padding: "9px 11px", fontSize: "13px", boxSizing: "border-box", background: TOKENS.panel, color: TOKENS.ink, border: "1px solid " + TOKENS.border, borderRadius: "8px", outline: "none" };
+	const TEXTAREA_STYLE = { width: "100%", minHeight: "120px", boxSizing: "border-box", fontFamily: "ui-monospace, 'Cascadia Mono', Consolas, monospace", fontSize: "12px", lineHeight: 1.6, padding: "11px", resize: "vertical", background: TOKENS.panel, color: TOKENS.ink, border: "1px solid " + TOKENS.border, borderRadius: "8px", outline: "none" };
+	const CARD_STYLE = { border: "1px solid " + TOKENS.border, borderRadius: "12px", padding: "15px", display: "flex", flexDirection: "column", gap: "11px", background: TOKENS.panel, boxShadow: "0 2px 10px rgba(0,0,0,.06)" };
+	const SELECT_STYLE = { padding: "8px 10px", fontSize: "12px", borderRadius: "8px", border: "1px solid " + TOKENS.border, background: TOKENS.panel2, color: TOKENS.ink };
+	const LIST_STYLE = { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "10px", fontSize: "13px" };
+	const LIST_ITEM = { display: "flex", alignItems: "center", gap: "8px", padding: "12px 13px", borderRadius: "10px", border: "1px solid " + TOKENS.border, cursor: "pointer", background: TOKENS.panel };
 
 	const ROLES = ["system", "user", "assistant"];
 
@@ -165,12 +166,15 @@ window.__ModuleLoader__.load({ id: "dsh-preset-plus", factory: (require) => {
 		const isActive = (id) => id === (doc && doc.activePresetId);
 
 		return h("div", { style: PACKET_STYLE },
-			h("p", { style: { marginTop: 0, opacity: 0.75, fontSize: "13px" } },
-				"dsh-preset-plus · 多预设编辑器。一个模式（preset-plus）对应多套预设，激活一套即生效。"),
-			!doc ? h("p", { style: { opacity: 0.6 } }, "加载中…")
-				: h("div", { style: { display: "flex", flexDirection: "column", gap: "12px" } },
-
-					h("div", { style: LIST_STYLE },
+			h("div", { style: { paddingBottom: "2px", borderBottom: "1px solid " + TOKENS.border } },
+				h("h2", { style: { margin: 0, fontSize: "20px", lineHeight: 1.35, fontWeight: 650, letterSpacing: "-.01em" } }, "预设增强"),
+				h("p", { style: { margin: "6px 0 15px", color: TOKENS.muted, fontSize: "13px", lineHeight: 1.55 } }, "管理 preset-plus 模式使用的提示词。选择一个预设并保存后，新会话即可生效。")),
+			!doc ? h("p", { style: { color: TOKENS.muted } }, "加载中…")
+				: h("div", { style: { display: "flex", flexDirection: "column", gap: "16px" } },
+					h("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "end", gap: "12px", flexWrap: "wrap" } },
+						h("div", null, h("div", { style: { fontSize: "12px", color: TOKENS.muted, marginBottom: "6px" } }, "选择预设"), h("div", { style: { fontSize: "14px", fontWeight: 600 } }, listed.length + " 套可用预设")),
+						h("div", { style: ROW_STYLE }, h("button", { style: BTN_GHOST, onClick: addPreset }, "+ 新增"), h("button", { style: BTN_GHOST, onClick: importPreset }, "导入"), h("button", { style: BTN_GHOST, onClick: exportAll }, "导出全部"))),
+				h("div", { style: LIST_STYLE },
 						listed.map((p) =>
 							h("div", { key: p.id, style: { display: "flex", alignItems: "center", gap: "6px", padding: "4px 8px", borderRadius: "6px", border: "1px solid rgba(128,128,128,0.25)", cursor: "pointer", background: isActive(p.id) ? "rgba(47,129,247,0.15)" : "transparent" }, onClick: () => activate(p.id) },
 								h("span", { style: { fontWeight: isActive(p.id) ? 700 : 400 } }, (isActive(p.id) ? "● " : "○ ") + p.id),
