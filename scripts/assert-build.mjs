@@ -16,6 +16,7 @@ const REQUIRED = [
   'lib/core.js',
   'client.js',
   'cordis.patch.yml',
+  'presets/jailbreak.json',
 ];
 
 let failed = false;
@@ -29,7 +30,7 @@ for (const rel of REQUIRED) {
 }
 
 // host 入口单独做语法解析
-for (const rel of ['lib/index.js', 'lib/core.js', 'client.js']) {
+for (const rel of ['lib/index.js', 'lib/core.js', 'client.js', 'presets/jailbreak.json']) {
   const abs = join(root, rel);
   try {
     readFileSync(abs, 'utf8'); // 能读即可；完整语法由 `lint` 的 node --check 做

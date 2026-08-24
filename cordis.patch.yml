@@ -4,6 +4,5 @@
       name: 'dsh-preset-plus'
       config:
         enabled: true
-        scopedPresets: ["jailbreak"]
-        autoMode: true
+        scopedPresets: ["preset-plus"]
         verbose: false

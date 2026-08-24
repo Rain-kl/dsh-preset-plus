@@ -10,7 +10,9 @@ DSH 自定义模式增强插件：仿照SillyTavern 的预设功能, 实现的�
 ## 工作方式
 
 ### 作用域门禁（核心安全约束）
-仅当**当前会话挂载的 preset id ∈ `scopedPresets`**（插件配置，默认 `["jailbreak"]`）时，才向请求注入预设上下文。
+插件只提供一个固定 DSH 模式 **`preset-plus`**。仅当**当前会话挂载的 preset id ∈ `scopedPresets`**（默认 `["preset-plus"]`）时，才向请求注入预设上下文。
+
+`jailbreak` 是内置预设 id，不是 DSH 模式 id。设置页中可以创建多个预设，但同一时间只激活一个；激活的预设决定 `preset-plus` 使用的提示词和自动注入开关。首次安装且没有保存文件时，会从随包发布的 `presets/jailbreak.json` 初始化。
 
 其他模式**一律不注入任何虚假上下文**，避免污染非破限场景。
 
@@ -42,9 +44,32 @@ dsh plugin --profile web add @rain-kl/dsh-preset-plus
 dsh plugin --profile web add github:Rain-kl/dsh-preset-plus
 ```
 
+## 预设数据与导入导出
+
+保存文件位于 `~/.dsh/preset-plus.json`（若设置了 `DSH_HOME` 则位于对应目录）。格式为：
+
+```json
+{
+  "version": 1,
+  "activePresetId": "jailbreak",
+  "presets": {
+    "jailbreak": {
+      "id": "jailbreak",
+      "name": "破限预设",
+      "autoMode": true,
+      "entries": [{ "role": "system", "text": "..." }]
+    }
+  }
+}
+```
+
+设置页支持新增、删除、激活和编辑预设，以及编辑条目的角色、文本、顺序。可以导出当前预设（单条 JSON）或全部预设（上述多条 JSON）；导入会自动识别格式，同 id 替换，其余预设保留并合并。
+
 ## 命令 / 工具
 
 - `/preset-plus status | prefill | on | off | save`
+- `/preset-plus list`：列出预设
+- `/preset-plus activate <id>`：激活预设
 - 模型工具：`preset_plus_status`
 
 ## 配置（cordis.patch.yml）
@@ -55,7 +80,7 @@ dsh plugin --profile web add github:Rain-kl/dsh-preset-plus
       name: 'dsh-preset-plus'
       config:
         enabled: true
-        scopedPresets: ["jailbreak"]
+        scopedPresets: ["preset-plus"]
         autoMode: true
         verbose: false
 ```
