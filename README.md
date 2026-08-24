@@ -18,7 +18,7 @@ DSH 预设增强插件：参考SillyTavern 的预设功能, 新增一个简单�
 
 其他模式**一律不进行任何注入**。
 
-## 预设设置界面
+## 预设界面
 
 ![preset-settings.png](docs/assets/preset-settings.png)
 
@@ -30,8 +30,7 @@ DSH 预设增强插件：参考SillyTavern 的预设功能, 新增一个简单�
 
 >注意: 伪造输入无法记录到"轨迹"中, 可以通过查看控制台打印判断是否注入成功
 > 
-![api-request.png](docs/assets/api-request.png)
-> 
+![console-log.png](docs/assets/console-log.png)
 
 ### AB 双模式
 - **自动（auto，可关）**：第一条真实消息到来时自动注入，每会话仅注入一次（防叠加）。
