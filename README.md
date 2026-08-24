@@ -68,6 +68,10 @@ dsh plugin --profile web add github:Rain-kl/dsh-preset-plus
 dsh plugin --profile web add @rain-kl/dsh-preset-plus
 ```
 
+在设置里配置完预设后, 选择 PresetPlus 模式使用既可生效
+
+![select-patern.png](docs/assets/select-patern.png)
+
 ---
 
 ## 命令 / 工具
