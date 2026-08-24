@@ -33,11 +33,23 @@ DSH 自定义模式增强插件：仿照SillyTavern 的预设功能, 实现的�
 
 ## 安装
 
-1. 将本目录 link 进 web profile（参照 `dsh-purge`）：
-   - `~/.dsh/profiles/web/package.json` 的 `dependencies` 加 `"dsh-preset-plus": "link:/Users/ryan/Documents/DSH/dsh-preset-plus"`
-   - `dsh.profile.bundles` 数组加 `"dsh-preset-plus"`
-   - 重新 `pnpm install`（在该 profile 下）
-2. 重启 dsh Web。
+### npm 直装（推荐，无需构建）
+```bash
+dsh plugin --profile web add @rain-kl/dsh-preset-plus
+```
+> 这是预构建的 npm 包（`@rain-kl/dsh-preset-plus`），不需要用户拉源码构建、不需要任何构建授权。指定版本可加 `@<version>`。
+
+### git 直装（纯 JS，无需 prepare 构建授权）
+```bash
+dsh plugin --profile web add github:Rain-kl/dsh-preset-plus#<sha>
+```
+> 插件本体是手写纯 JS（`lib/` + `client.js`），没有 TS 源码、没有 build 脚本，因此 git 安装后即可直接加载，不需要 `allowBuilds` 授权。建议锁定 commit（`#<sha>`）。
+
+### 本地 link 调试
+开发时可用本地路径 link（参照 `dsh-purge`）：
+```bash
+dsh plugin --profile web add /Users/ryan/Documents/DSH/dsh-preset-plus
+```
 
 > 客户端 bundle 通过插件 `package.json` 的 `dsh.client` 配置 + `client.js` 注入。
 
@@ -58,6 +70,22 @@ DSH 自定义模式增强插件：仿照SillyTavern 的预设功能, 实现的�
         autoMode: true
         verbose: false
 ```
+
+## 发布（维护者）
+
+发布流程（照搬 modlens 模式）：`pnpm release <version>` 负责 bump 版本、打 `v*` tag、push；**push 出 tag 后 CI 的 `.github/workflows/release.yml` 是唯一发布点**。
+
+```bash
+pnpm release 0.1.1     # 显式版本
+pnpm release patch      # 从当前版本 bump
+```
+
+`release` 脚本会先做守卫（git 干净、在 main、版本前进、tag 不存在、远端同步、CHANGELOG 有对应段），全部通过才不可逆地提交+打tag+push。发布与建 GitHub Release 由 CI 执行：
+
+- **`.github/workflows/ci.yml`**：push/PR 触发，做发布入口健康检查（`scripts/assert-build.mjs` + 语法检查）。
+- **`.github/workflows/release.yml`**：push `v*` tag 触发，用 OIDC 信任发布（`npm publish --provenance`）+ 从 CHANGELOG 提取 notes 建 GitHub Release。
+
+**发布前的唯一前置（无法在仓库内配置）**：在 npmjs.com 打开 `@rain-kl/dsh-preset-plus` 的 package 设置 → **Trusted publishers** → 添加本仓库与本 workflow（`Rain-kl/dsh-preset-plus`，`.github/workflows/release.yml`）。未配置前 `npm publish --provenance` 会以身份错误失败。
 
 ## 许可
 MIT

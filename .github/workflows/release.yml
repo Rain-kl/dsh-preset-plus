@@ -1,0 +1,82 @@
+name: release
+
+# 推 v* tag 触发：发布到 npm + 建 GitHub Release。
+# tag 通常由 scripts/release.mjs 创建（`pnpm release <version>`），它本地跑同样的守卫
+# 并 push tag，但**不** publish。本 workflow 是唯一发布点，二者不会竞争。
+# 它重跑守卫、用 OIDC 信任发布（--provenance），再从 CHANGELOG 提取 notes 建 Release。
+#
+# 前提（无法在本文件配置）：npm 端启用"trusted publishing"。在 npmjs.com 打开
+# @rain-kl/dsh-preset-plus 的 package 设置 → "Trusted publishers"→ 加本仓库与本 workflow
+# （Rain-kl/dsh-preset-plus, .github/workflows/release.yml）。这会让 npm 用本 workflow
+# 申请的 OIDC token 铸一个短时凭据，无需长期 NPM_TOKEN。未配置前 `npm publish --provenance`
+# 会以身份错误失败。本文件侧是下方 `id-token: write` 权限。
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  # 建 GitHub Release 需要写权限。
+  contents: write
+  # provenance 与 OIDC 信任发布需要。
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+          cache: pnpm
+      # OIDC 信任发布与 --provenance 需要 npm 11.5.1+，比 Node 22 自带的新。
+      - run: npm install -g npm@11
+      - run: pnpm install --frozen-lockfile || pnpm install --no-frozen-lockfile
+      # 发布入口健康检查（纯 JS 插件）。
+      - run: node scripts/assert-build.mjs
+      # push 的 tag 必须就是 package.json 里的版本。
+      - run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          PKG_VERSION="$(node -p "require('./package.json').version")"
+          if [ "$VERSION" != "$PKG_VERSION" ]; then
+            echo "tag v$VERSION does not match package.json version $PKG_VERSION" >&2
+            exit 1
+          fi
+      # 从 CHANGELOG 提取本版本段作为 Release notes；空则失败（回退仍便宜）。
+      - name: Extract release notes from CHANGELOG
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          awk -v ver="$version" '
+            $0 == "## " ver || index($0, "## " ver " ") == 1 { grab=1; next }
+            grab && /^## / { exit }
+            grab { print }
+          ' CHANGELOG.md > release-notes.md
+          if [ ! -s release-notes.md ]; then
+            echo "No CHANGELOG section for $version" >&2
+            exit 1
+          fi
+      # 幂等：版本已在线上则跳过发布（防 registry/Actions 故障后的手动补发变红）。
+      - name: Publish to npm (skipped when the version is already live)
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          PKG="$(node -p "require('./package.json').name")"
+          if npm view "$PKG@$VERSION" version >/dev/null 2>&1; then
+            echo "$PKG@$VERSION is already on the registry; skipping publish."
+          else
+            npm publish --provenance --access public
+          fi
+      - name: Create GitHub Release from the tag and CHANGELOG
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            echo "Release $GITHUB_REF_NAME already exists; skipping."
+          else
+            gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --notes-file release-notes.md
+          fi

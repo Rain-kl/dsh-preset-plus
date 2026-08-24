@@ -1,0 +1,29 @@
+name: ci
+
+# 纯 JS 插件：无 TypeScript/无测试套件。CI 做的是"发布入口健康校验"——
+# 确认 lib/、client.js、cordis.patch.yml 都在且 host 核心可加载，防止误发布缺文件的包。
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile || pnpm install --no-frozen-lockfile
+      # 发布入口健康检查：所有必需文件存在、语法可解析、core 可加载。
+      - run: node scripts/assert-build.mjs
+      # 语法检查（host + client + core）。
+      - run: node --check lib/index.js && node --check lib/core.js && node --check client.js
+      # 核心模块 + 默认预设能正常产出。
+      - run: >-
+          node -e "import('./lib/core.js').then(m=>{const p=m.defaultPreset();if(!Array.isArray(p.entries)||p.entries.length<1)process.exit(1);console.log('defaultPreset OK: '+p.entries.length+' entries')})"

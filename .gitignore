@@ -2,3 +2,5 @@ node_modules/
 *.tgz
 npm-debug.log*
 .idea
+.DS_Store
+release-notes.md

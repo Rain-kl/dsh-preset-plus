@@ -1,5 +1,5 @@
 {
-  "name": "dsh-preset-plus",
+  "name": "@rain-kl/dsh-preset-plus",
   "version": "0.1.0",
   "description": "DSH 通用预设增强插件：一个可编辑的预设编辑器（system/user/assistant 条目 + 伪装模型输出预填充），仅在指定 preset 下生效。内置破限（jailbreak）预设。",
   "type": "module",
@@ -17,6 +17,12 @@
     "README.md",
     "LICENSE"
   ],
+  "scripts": {
+    "build": "node scripts/assert-build.mjs",
+    "prepare": "node scripts/assert-build.mjs",
+    "lint": "node --check lib/index.js && node --check lib/core.js && node --check client.js",
+    "release": "node scripts/release.mjs"
+  },
   "license": "MIT",
   "keywords": [
     "dsh",
@@ -27,6 +33,15 @@
     "prefill",
     "agent"
   ],
+  "author": "Rain-kl",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rain-kl/dsh-preset-plus.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Rain-kl/dsh-preset-plus/issues"
+  },
+  "homepage": "https://github.com/Rain-kl/dsh-preset-plus#readme",
   "dsh": {
     "bundle": {
       "patch": "./cordis.patch.yml"
