@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // dsh-preset-plus 是手写纯 JS，无编译步骤。"build" 因此在发布/安装前校验
 // 发布入口确实存在且可解析——防止误发布一个缺文件的包。
-// 作为 npm `prepare`（git 安装时运行）也用它：这里只做只读校验，不需要构建授权，
-// 因此 git 直装也不会要求用户放行任何脚本执行权限。
+// 注意：包内不再放 prepare/postinstall（pnpm 10 默认拦截依赖构建脚本，会破坏
+// 一行安装）。本脚本在 CI 里作为显式步骤运行。
 
 import { readFileSync, existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -19,7 +19,6 @@ const REQUIRED = [
   'presets/jailbreak.json',
   'preset/preset.yml',
   'preset/agent.cordis.yml',
-  'scripts/install-preset.mjs',
 ];
 
 let failed = false;
