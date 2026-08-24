@@ -1,7 +1,9 @@
 # dsh-preset-plus bundle patch: inserts the plugin into a profile's layer stack.
+# name 必须与真实安装的包名一致（带 scope）：DSH 加载器按 name 导入该包，
+# 未加 scope 会触发 ERR_MODULE_NOT_FOUND。
 - insert:
     - id: dsh-preset-plus
-      name: 'dsh-preset-plus'
+      name: '@rain-kl/dsh-preset-plus'
       config:
         enabled: true
         scopedPresets: ["preset-plus"]
