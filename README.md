@@ -52,6 +52,13 @@
 - **自动（auto，可关）**：第一条真实消息到来时自动注入，每会话仅注入一次（防叠加）。
 - **手动（/preset-plus prefill）**：用户显式触发，注入标记生效于下一条消息。
 
+## 命令 / 工具
+
+- `/preset-plus status | prefill | on | off | save`
+- `/preset-plus list`：列出预设
+- `/preset-plus activate <id>`：激活预设
+- 模型工具：`preset_plus_status`
+
 ---
 
 ## 快速开始
@@ -72,27 +79,6 @@ dsh plugin --profile web add @rain-kl/dsh-preset-plus
 
 ![select-patern.png](docs/assets/select-patern.png)
 
----
-
-## 命令 / 工具
-
-- `/preset-plus status | prefill | on | off | save`
-- `/preset-plus list`：列出预设
-- `/preset-plus activate <id>`：激活预设
-- 模型工具：`preset_plus_status`
-
-## 配置（cordis.patch.yml）
-
-```yaml
-- insert:
-    - id: dsh-preset-plus
-      name: 'dsh-preset-plus'
-      config:
-        enabled: true
-        scopedPresets: ["preset-plus"]
-        autoMode: true
-        verbose: false
-```
 
 ---
 

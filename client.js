@@ -2,7 +2,7 @@
 // 预设列表（选择/激活/新增/删除） + 当前预设条目编辑（system/user/assistant）。
 // 支持：导出单个预设、导出全部、导入（单条结构自动并入，多条结构合并）。
 // Hand-written __ModuleLoader__ factory (no build step), mirroring dsh-purge/client.js.
-window.__ModuleLoader__.load({ id: "dsh-preset-plus", factory: (require) => {
+window.__ModuleLoader__.load({ id: "@rain-kl/dsh-preset-plus", factory: (require) => {
 	var module = { exports: {} };
 	var exports = module.exports;
 	Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
@@ -10,7 +10,7 @@ window.__ModuleLoader__.load({ id: "dsh-preset-plus", factory: (require) => {
 	const h = react.createElement;
 	const { useState, useEffect, useCallback, useRef } = react;
 
-	const name = "dsh-preset-plus";
+	const name = "@rain-kl/dsh-preset-plus";
 	const inject = ["slots"];
 
 	const TOKENS = { ink: "var(--dsw-alias-label-primary, #e5e7eb)", muted: "var(--dsw-alias-label-tertiary, #9ca3af)", dim: "var(--dsw-alias-label-dimmed, #6b7280)", border: "var(--dsw-alias-border-l2, rgba(128,128,128,.25))", panel: "var(--dsw-alias-bg-layer-3, rgba(255,255,255,.035))", panel2: "var(--dsw-alias-bg-layer-2, rgba(255,255,255,.06))", accent: "var(--dsw-alias-brand-primary, #4d9cff)", danger: "var(--dsw-alias-state-error-primary, #ef6b73)" };
@@ -314,7 +314,7 @@ window.__ModuleLoader__.load({ id: "dsh-preset-plus", factory: (require) => {
 	function apply(ctx) {
 		ctx.slots.inject("settings.section", () => ctx.slots.register({
 			name: "settings.section",
-			id: "dsh-preset-plus",
+			id: "@rain-kl/dsh-preset-plus",
 			order: 42,
 			label: () => "预设增强",
 		}, () => h(PresetEditor, null)));
