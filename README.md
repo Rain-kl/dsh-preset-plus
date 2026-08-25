@@ -49,7 +49,7 @@
 ![console-log.png](docs/assets/console-log.png)
 
 ### AB 双模式
-- **自动（auto，可关）**：第一条真实消息到来时自动注入，每会话仅注入一次（防叠加）。
+- **自动（auto，可关）**：第一条真实消息到来时自动注入。
 - **手动（/preset-plus prefill）**：用户显式触发，注入标记生效于下一条消息。
 
 ## 命令 / 工具
