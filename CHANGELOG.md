@@ -5,9 +5,14 @@
 
 ## [Unreleased]
 
+### 修复
+- system 段改用 `systemPrompt.section()` 注册（text 为函数，每次组装时从预设动态读取），与 billion 机制一致。system 在组装阶段（`system-prompt/assemble`）即加入，轨迹可见。`llm/stream` handler 不再碰 `options.system`，仅负责前置 fake 消息。
+
 ## 0.1.5 - 2026-08-27
 ### 修复
 - 破限注入不再按「一个会话只注入一次」：每个新的主请求都会重新合并 system 并前置 fake 消息，避免第二轮及后续请求丢失破限。同一请求内部重入仍跳过，防止重复叠加。
+- `preset/agent.cordis.yml` 变更后，`ensureAgentPresetMode` 改为每次启动都从包内覆盖（而不是「目标已存在则跳过」），保证开发迭代时模式文件始终同步。
+- 注入日志改为打印合并后 system 文本的前 100 字符，可直接在控制台看到实际注入的提示词。
 
 ## 0.1.4 - 2026-08-25
 

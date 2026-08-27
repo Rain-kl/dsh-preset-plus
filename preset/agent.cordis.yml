@@ -10,22 +10,6 @@
 # `true` means an entry-local realm: this standing mount's own private
 # instance, apart from every other preset's.
 
-# ── identity ────────────────────────────────────────────────────────────────
-
-# The preset's own persona. The plugin's runtime injection replaces the system
-# prompt with the active preset's first `system` entry, so this is a fallback
-# only (used when auto-injection is off).
-- id: persona
-  name: '@deepseek-ai/dsh-persona'
-  config:
-    text: >-
-      You are a coding agent powered by the {{model}} model. Your working directory is {{cwd}}.
-
-- id: agent-instructions
-  name: '@deepseek-ai/dsh-agent-instructions'
-  config:
-    maxBytes: 65536
-
 # ── shell ───────────────────────────────────────────────────────────────────
 
 # Both shell tools consume the host registry from here; their executors
