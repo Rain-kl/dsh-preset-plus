@@ -12,7 +12,6 @@
   "files": [
     "lib",
     "presets",
-    "preset",
     "scripts",
     "docs",
     "client.js",
@@ -52,7 +51,6 @@
       "platform": "web",
       "inject": [
         "@deepseek-ai/dsh-client-connection",
-        "@deepseek-ai/dsh-client-runtime",
         "@deepseek-ai/dsh-client-locale",
         "@deepseek-ai/dsh-client-ui-settings"
       ]

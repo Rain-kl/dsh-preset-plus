@@ -17,8 +17,6 @@ const REQUIRED = [
   'client.js',
   'cordis.patch.yml',
   'presets/jailbreak.json',
-  'preset/preset.yml',
-  'preset/agent.cordis.yml',
 ];
 
 let failed = false;
@@ -47,22 +45,42 @@ if (failed) {
   process.exit(1);
 }
 
-// PresetPlus 的组合必须承载至少一个工具行（否则以该模式启动的会话没有任何
-// 模型可用的工具）。读取文本做宽松的启发式检查：不是空数组 `[]`，且出现至少
-// 一个脚本行（以 `- id:` 开头）。完整语义校验由 CI 的 mount-validate 兜底。
+// PresetPlus 的组合现在由 cordis.patch.yml 里的 `@deepseek-ai/dsh-agent-preset`
+// 声明行承载（DSH 不再读取 $DSH_HOME/.agent-presets/ 目录）。
+// 这里做结构性检查：声明行存在、组合非空、没有引用上游已移除的包。
+// 真正的语义校验（每个 name 能否解析、realm 是否合规）需要一份部署，由挂载
+// 校验兜底（见 CHANGELOG: workflow-worker-thread 曾导致整个模式挂载失败）。
+const RETIRED = [
+  // 0.2.1 起由 @deepseek-ai/dsh-workflow-ptc 取代。
+  '@deepseek-ai/dsh-workflow-worker-thread',
+  // 该子路径已不再导出；`list_agents` 由 tool-subagent-control 本身注册。
+  '@deepseek-ai/dsh-tool-subagent-control/list-agents',
+];
+
 try {
-  const composition = readFileSync(join(root, 'preset/agent.cordis.yml'), 'utf8');
-  const rowCount = (composition.match(/^\s*- id:/gm) || []).length;
-  if (rowCount === 0) {
-    console.error('[assert-build] preset/agent.cordis.yml 是空组合（无任何 - id: 行）；请先补齐工具行。');
-    process.exit(1);
+  const patch = readFileSync(join(root, 'cordis.patch.yml'), 'utf8');
+  const problems = [];
+  if (!/^\s*- id: preset-preset-plus\s*$/m.test(patch)) {
+    problems.push('缺少 `- id: preset-preset-plus` 声明行（PresetPlus 模式不会出现）');
   }
-  if (/^\s*\[\s*\]\s*$/m.test(composition)) {
-    console.error('[assert-build] preset/agent.cordis.yml 是空数组 `[]`；请先用完整的工具组合填充。');
+  if (!/^\s*id: preset-plus\s*$/m.test(patch)) {
+    problems.push('声明的 `config.id` 不是 preset-plus（与 config.scopedPresets 不匹配）');
+  }
+  if ((patch.match(/^\s*- id:/gm) || []).length < 2) {
+    problems.push('组合里没有任何插件行（以该模式启动的会话不会有工具）');
+  }
+  // 只看真正的 `name:` 值，注释里提到旧包名不算引用。
+  const names = [...patch.matchAll(/^\s*name:\s*['"]?([^'"\s]+)['"]?\s*$/gm)].map((m) => m[1]);
+  for (const name of RETIRED) {
+    if (names.includes(name)) problems.push(`引用了上游已移除的包: ${name}`);
+  }
+  if (names.length === 0) problems.push('组合里没有任何 `name:` 行');
+  if (problems.length > 0) {
+    for (const problem of problems) console.error(`[assert-build] ${problem}`);
     process.exit(1);
   }
 } catch (e) {
-  console.error(`[assert-build] 读不了 preset/agent.cordis.yml: ${e.message}`);
+  console.error(`[assert-build] 读不了 cordis.patch.yml: ${e.message}`);
   process.exit(1);
 }
 

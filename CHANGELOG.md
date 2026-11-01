@@ -5,6 +5,31 @@
 
 ## [Unreleased]
 
+## 0.2.0 - 2026-11-01
+
+### 修复（适配 DSH 0.2.x，PresetPlus 模式此前完全不可用）
+
+- **PresetPlus 模式改用声明式注册**：DSH 0.2.x 起不再扫描 `$DSH_HOME/.agent-presets/<id>/` 目录，
+  一个 Agent 模式就是一行 `@deepseek-ai/dsh-agent-preset` 声明。组合因此从 `preset/agent.cordis.yml`
+  移到 `cordis.patch.yml` 的 `preset-preset-plus` 行（`config.id: preset-plus`，与 `scopedPresets` 对齐），
+  插件不再在启动时复制目录，`preset/` 目录已删除。
+- **修掉已移除的依赖包**：组合里的 `@deepseek-ai/dsh-workflow-worker-thread` 已被上游删除，
+  会让整个 preset 挂载失败（`row "workflow-worker-thread" names a plugin that cannot be resolved`），
+  改为 `@deepseek-ai/dsh-workflow-ptc`（仍在 `delegation` 的 `workflowEngine` realm 内）。
+- **修掉已移除的子路径**：`@deepseek-ai/dsh-tool-subagent-control/list-agents` 不再出现在该包的
+  `exports` 里（`list_agents` 现由 `tool-subagent-control` 自身注册），单独列一行同样会让 preset
+  挂载失败，已删除。
+- **去掉失效的配置键**：`tool-subagent` 的 `backgroundMode` 自 0.2.1-alpha.1 起被移除（委派改为
+  受管理的 subagent activation），从组合中删除，避免误导后续启用 codex/claude-code 行。
+- **补齐与 standard 模式的工具差**：新增 `present`、`tool-schedule`、`command-goal` 三行，
+  与 `standard` 对齐（预设声明为「具备标准模式所有的能力」）。
+- **清掉不存在的 client 依赖**：`dsh.client.inject` 里的 `@deepseek-ai/dsh-client-runtime` 在 0.2.x
+  已不存在，移除该项。
+- 构建守卫改为校验 `cordis.patch.yml`：声明行存在、`config.id` 为 `preset-plus`、组合非空、
+  且不引用已移除的包/子路径。
+- README 快速开始修正为 `--profile desktop`（桌面端 App 的 profile），并说明装错 profile 时
+  插件行根本不会出现。
+
 ### 修复
 - system 段改用 `systemPrompt.section()` 注册（text 为函数，每次组装时从预设动态读取），与 billion 机制一致。system 在组装阶段（`system-prompt/assemble`）即加入，轨迹可见。`llm/stream` handler 不再碰 `options.system`，仅负责前置 fake 消息。
 

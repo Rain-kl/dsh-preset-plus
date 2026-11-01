@@ -63,16 +63,20 @@
 
 ## 快速开始
 
+> **装到哪个 profile？** 插件只对**你正在用的那个 profile** 生效。桌面端 App 用的是
+> `desktop` profile（`$DSH_HOME/profiles/desktop`），命令行 `dsh web` 默认是 `web`。
+> 装错 profile 时插件行根本不会出现——先用 `--profile` 指定正确的那一个。
+
 ### Git (推荐)
 ```bash
-dsh plugin --profile web add github:Rain-kl/dsh-preset-plus
+dsh plugin --profile desktop add github:Rain-kl/dsh-preset-plus
 ```
 
 ### npm 仓库
 
 ```bash
 #可能存在版本滞后
-dsh plugin --profile web add @rain-kl/dsh-preset-plus
+dsh plugin --profile desktop add @rain-kl/dsh-preset-plus
 ```
 
 在设置里配置完预设后, 选择 PresetPlus 模式使用既可生效
